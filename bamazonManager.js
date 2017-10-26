@@ -61,12 +61,82 @@ function lowInventory () {
 	})
 };
 
-function addInentory () {
-	inquirer.prompt ({
-		
+function addInventory () {
+	inquirer.prompt ([
+	{
+		name: "id",
+		type: "input",
+		message: "Enter the ID of the product you want"
+	},
+	{
+		name: "amount",
+		type: "input",
+		message: "Enter the amount you want to add"
+	}
+	]).then(function(answer) {
+		var query = connection.query ("UPDATE products SET ? WHERE ? ",
+			[	
+				{
+					stock_quantity: + answer.amount
+					//did not add to it just replaced it trying to figure out how to add with this code
+				},
+				{
+					item_id: answer.id
+				}
+			],
+			function(err,results) {
+				console.log(results.affectedRows + "updated");
+			managerMenu();
+			}
+		)
 	})
-}
+};
 
+function addProduct () {
+	inquirer.prompt([
+	{
+		name: "name",
+		type: "input",
+		message: "What's the name of the new product?",
+	},
+	{
+		name: "cost",
+		type: "input",
+		message: "How much does it cost?",
+	},
+	{
+		name: "qty",
+		type: "input",
+		message: "How much in stock?",
+	},
+	{
+		name: "id",
+		type: "input",
+		message: "What's it's unique id?",
+	},
+	{
+		name: "dept",
+		type: "list",
+		message: "Which department are you looking to add it too",
+		choices: ["Home", "Menswear", "Womenswear", "Accesories", "Shoes"]
+	}
+	]).then(function(input) {
+		var query = connection.query("INSERT INTO products SET ?",
+		{
+			item_id: input.id,
+			product_name: input.name,
+			department_name: input.dept,
+			price: input.cost,
+			stock_quantity: input.qty
+		},
+		function(err, results) {
+			console.log(results.affectedRows + "New product added");
+			console.log(query.sql);
+			managerMenu();
+		}
+		)
+	})
+};
 
 
 

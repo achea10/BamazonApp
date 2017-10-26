@@ -54,7 +54,7 @@ function buyProduct () {
 					connection.query(update, function(err, results) {
 						if (err) throw err;
 						 else {
-							console.log(result.affectedRows + " updated");
+							console.log(results.affectedRows + " updated");
 						}
 					});
 
